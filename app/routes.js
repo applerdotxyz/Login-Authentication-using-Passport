@@ -1,57 +1,56 @@
-var User = require('./models/user');
-module.exports = function(app, passport){
-	app.get('/', function(req, res){
-		res.render('index.ejs');
-	});
+const User = require('./models/user');
 
-	app.get('/login', function(req, res){
-		res.render('login.ejs', { message: req.flash('loginMessage') });
-	});
-	app.post('/login', passport.authenticate('local-login', {
-		successRedirect: '/profile',
-		failureRedirect: '/login',
-		failureFlash: true
-	}));
+module.exports = function (app, passport) {
+  app.get('/', (req, res) => {
+    res.render('index.ejs');
+  });
 
-	app.get('/signup', function(req, res){
-		res.render('signup.ejs', { message: req.flash('signupMessage') });
-	});
+  app.get('/login', (req, res) => {
+    res.render('login.ejs', { message: req.flash('loginMessage') });
+  });
+  app.post('/login', passport.authenticate('local-login', {
+    successRedirect: '/profile',
+    failureRedirect: '/login',
+    failureFlash: true,
+  }));
 
-
-	app.post('/signup', passport.authenticate('local-signup', {
-		successRedirect: '/',
-		failureRedirect: '/signup',
-		failureFlash: true
-	}));
-
-	app.get('/profile', isLoggedIn, function(req, res){
-		res.render('profile.ejs', { user: req.user });
-	});
+  app.get('/signup', (req, res) => {
+    res.render('signup.ejs', { message: req.flash('signupMessage') });
+  });
 
 
+  app.post('/signup', passport.authenticate('local-signup', {
+    successRedirect: '/',
+    failureRedirect: '/signup',
+    failureFlash: true,
+  }));
 
-	app.get('/:username/:password', function(req, res){
-		var newUser = new User();
-		newUser.local.username = req.params.username;
-		newUser.local.password = req.params.password;
-		console.log(newUser.local.username + " " + newUser.local.password);
-		newUser.save(function(err){
-			if(err)
-				throw err;
-		});
-		res.send("Success!");
-	});
+  app.get('/profile', isLoggedIn, (req, res) => {
+    res.render('profile.ejs', { user: req.user });
+  });
 
-	app.get('/logout', function(req, res){
-		req.logout();
-		res.redirect('/');
-	})
+
+  app.get('/:username/:password', (req, res) => {
+    const newUser = new User();
+    newUser.local.username = req.params.username;
+    newUser.local.password = req.params.password;
+    console.log(`${newUser.local.username} ${newUser.local.password}`);
+    newUser.save((err) => {
+      if (err) { throw err; }
+    });
+    res.send('Success!');
+  });
+
+  app.get('/logout', (req, res) => {
+    req.logout();
+    res.redirect('/');
+  });
 };
 
 function isLoggedIn(req, res, next) {
-	if(req.isAuthenticated()){
-		return next();
-	}
+  if (req.isAuthenticated()) {
+    return next();
+  }
 
-	res.redirect('/login');
+  res.redirect('/login');
 }

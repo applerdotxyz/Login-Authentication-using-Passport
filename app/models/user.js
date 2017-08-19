@@ -1,10 +1,10 @@
-var mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-var userSchema = mongoose.Schema({
-	local: {
-		username: String,
-		password: String
-	}
+const userSchema = mongoose.Schema({
+  local: {
+    username: String,
+    password: String,
+  },
 });
 
 module.exports = mongoose.model('User', userSchema);
