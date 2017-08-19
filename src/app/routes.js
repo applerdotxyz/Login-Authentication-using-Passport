@@ -1,6 +1,14 @@
 const User = require('./models/user');
 
-module.exports = function (app, passport) {
+const isLoggedIn = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+
+  res.redirect('/login');
+};
+
+module.exports = (app, passport) => {
   app.get('/', (req, res) => {
     res.render('index.ejs');
   });
@@ -46,11 +54,3 @@ module.exports = function (app, passport) {
     res.redirect('/');
   });
 };
-
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-
-  res.redirect('/login');
-}

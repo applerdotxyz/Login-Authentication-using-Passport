@@ -10,3 +10,8 @@ install latest version of mongo db from https://www.mongodb.com/download-center?
 2.`npm install`
 3.`node server.js`
 4. For firebase deployment. install `firebase-tools`
+
+### TODOs
+- [ ] add `environment-management`
+- [ ] deploy to `heroku`
+- [ ] add `tests`
